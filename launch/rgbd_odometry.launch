@@ -19,13 +19,26 @@
 
     <arg name="sensor_type_sr4000" default="false" />
     <arg name="sensor_type_ds325" default="false" />
-    <arg name="sensor_type_astra" default="true" />
-    <arg name="sensor_type_xtion" default="false" />
+    <arg name="sensor_type_astra" default="false" />
+    <arg name="sensor_type_xtion" default="true" />
     <arg name="sensor_type_kinect_xbox360" default="false" />
     <arg name="sensor_type_kinect_xboxOne" default="false" />
 
     <!-- parameters for real-time rviz visualization -->                
-    <group ns="$(arg camera)">
+    <group if="$(arg sensor_type_xtion)">
+        <include if="true"
+                 file="$(find rgbd_launch)/launch/includes/manager.launch.xml">
+            <arg name="name" value="$(arg camera)_nodelet_manager" />
+            <arg name="debug" value="false" />
+            <arg name="num_worker_threads"  value="4" />
+        </include>
+        <remap from="/camera/depth_registered/image_raw" to="depth_registered/input_image"/>    
+        <remap from="/camera/rgb/image_raw" to="rgb/input_image"/>    
+        <remap from="/camera/rgb/camera_info" to="rgb/camera_info"/>    
+        <include if="$(arg sensor_type_xtion)" file="$(find openni2_launch)/launch/openni2.launch"/>
+    </group>
+
+    <group ns="$(arg camera)" if="$(arg sensor_type_astra)">
   
         <param name="driver/data_skip" value="0" />
 
@@ -40,7 +53,6 @@
         </include>
 
         <!-- Load astra driver -->
-        <include if="$(arg sensor_type_xtion)" file="$(find openni2_launch)/launch/openni2.launch"/>
         <!--<include if="$(arg sensor_type_astra)" file="$(find astra_launch)/launch/astra.launch"/>-->
         <include if="$(arg sensor_type_astra)"
                  file="$(find astra_launch)/launch/includes/device.launch.xml">            

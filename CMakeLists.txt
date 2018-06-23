@@ -6,6 +6,7 @@ subdirs(core)
 # uncomment this if cmake is not finding your packages
 # to view the paths searched and decisions made by cmake
 set( CMAKE_FIND_DEBUG_MODE 1 )
+set( CMAKE_BUILD_TYPE Release )
 #
 # Note: CLEAN COMPILE AFTER CHANGING OpenCV_DIR!!!!
 #
@@ -28,7 +29,7 @@ set( GCC_PROFILE_LINK_FLAGS "-g -pg" )
 
 #set( GCC_DEFAULT_COMPILE_FLAGS "-std=c++11" )
 set( GCC_DEFAULT_COMPILE_FLAGS "-std=gnu++11" )
-set( GCC_DEFAULT_LINK_FLAGS "" )
+#set( GCC_DEFAULT_LINK_FLAGS "" )
 
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_DEFAULT_COMPILE_FLAGS}" )
 set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_DEFAULT_LINK_FLAGS}" )
