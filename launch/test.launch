@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Tools to change and view node example output. -->
+<launch>
+  <remap from="/camera/rgb/image_raw" to="rgb/input_image"/>
+  <remap from="/camera/depth_registered/image_raw" to="depth_registered/input_image"/>
+  <remap from="/camera/rgb/rgb/input_image" to="/camera/rgb/input_image"/>
+  <remap from="/camera/rgb/rgb/camera_info" to="/camera/rgb/camera_info"/>
+
+  <arg name="sensor_type_astra" default="true" />
+  <include if="$(arg sensor_type_astra)" file="$(find astra_launch)/launch/astra_pro.launch">
+  </include>
+
+</launch>
