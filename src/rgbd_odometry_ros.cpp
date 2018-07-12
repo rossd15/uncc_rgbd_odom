@@ -299,6 +299,8 @@ void RGBDOdometryEngine::rgbdCallback(const sensor_msgs::ImageConstPtr& depth_ms
     
     if (initializationDone && odomEstimatorSuccess) {
         publishOdometry(trans, covMatrix, keyframe_frameid_str);
+        counter.data++;
+        image_counter_publisher.publish(counter);
     }
     prior_keyframe_frameid_str = keyframe_frameid_str;
 }
@@ -519,6 +521,7 @@ void RGBDOdometryEngine::initializeSubscribersAndPublishers() {
     pubXforms = nodeptr->advertise<geometry_msgs::TransformStamped>("relative_xform", 1000);
     pubPose_w_cov = nodeptr->advertise<geometry_msgs::PoseWithCovarianceStamped>("pose_w_cov", 1000);
     pubOdom_w_cov = nodeptr->advertise<geometry_msgs::PoseWithCovarianceStamped>("odom_w_cov", 1000);
+    image_counter_publisher = nodeptr->advertise<std_msgs::UInt16>("image_counter",100);
 }
 
 int main(int argc, char **argv) {
