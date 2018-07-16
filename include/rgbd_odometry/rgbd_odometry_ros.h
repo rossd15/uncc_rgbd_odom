@@ -18,6 +18,7 @@
 #include <message_filters/subscriber.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Header.h>
+#include <std_msgs/UInt16.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CameraInfo.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -56,6 +57,7 @@ public:
     nodeptr(new ros::NodeHandle),
     nh("~"),
     initializationDone(false) {
+        counter.data = 0;
         std::string opencl_path, depthmask_cl, tf_truth_topic, calibration_pose;
         std::string optical_parent, optical_frame, depth_processing_str;
         std::string feature_detector, feature_descriptor;
@@ -184,6 +186,9 @@ private:
     ros::Publisher pubOdomMsg;
     ros::Publisher pubPose_w_cov;
     ros::Publisher pubOdom_w_cov;
+    
+    ros::Publisher image_counter_publisher;
+    std_msgs::UInt16 counter;
 
     //    typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, sensor_msgs::Image, sensor_msgs::CameraInfo> MyApproximateSyncPolicy;
     //    message_filters::Synchronizer<MyApproximateSyncPolicy> syncApprox;

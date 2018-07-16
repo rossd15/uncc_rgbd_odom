@@ -80,7 +80,7 @@ namespace Eigen {
 }
 
 void RGBDOdometryEngine::tf_truth_Callback(const geometry_msgs::TransformStampedConstPtr& tf_truth) {
-    // UNCOMMENT WHEN USING vrpn_client_ros
+    // UNCOMMENT WHEN USING vrpn_client_ros 
     //void RGBDOdometryEngine::tf_truth_Callback(const geometry_msgs::PoseStampedConstPtr& tf_truth) {
     //    static geometry_msgs::PoseStampedConstPtr first_tf;
     static geometry_msgs::TransformStampedConstPtr first_tf;
@@ -296,9 +296,11 @@ void RGBDOdometryEngine::rgbdCallback(const sensor_msgs::ImageConstPtr& depth_ms
         prev_rgb_img_ptr = rgb_img_ptr;
         prev_depth_img_ptr = depth_img_ptr;
     }
-
+    
     if (initializationDone && odomEstimatorSuccess) {
         publishOdometry(trans, covMatrix, keyframe_frameid_str);
+        counter.data++;
+        image_counter_publisher.publish(counter);
     }
     prior_keyframe_frameid_str = keyframe_frameid_str;
 }
@@ -319,7 +321,7 @@ void RGBDOdometryEngine::tofGreyImageCallback(const sensor_msgs::ImageConstPtr& 
 
 // Detectors/Descriptors: ORB, SIFT, SURF, BRISK
 //  Detector-only algorithms: FAST, GFTT
-//  Descriptor-only algorithms: BRIEF
+//  Descriptor-only algorithms: BRIEF 
 #define NUM_TESTS 1
 int trackedIdx = 0;
 #ifdef PERFORMANCE_EVAL
@@ -519,6 +521,7 @@ void RGBDOdometryEngine::initializeSubscribersAndPublishers() {
     pubXforms = nodeptr->advertise<geometry_msgs::TransformStamped>("relative_xform", 1000);
     pubPose_w_cov = nodeptr->advertise<geometry_msgs::PoseWithCovarianceStamped>("pose_w_cov", 1000);
     pubOdom_w_cov = nodeptr->advertise<geometry_msgs::PoseWithCovarianceStamped>("odom_w_cov", 1000);
+    image_counter_publisher = nodeptr->advertise<std_msgs::UInt16>("image_counter",100);
 }
 
 int main(int argc, char **argv) {
@@ -563,3 +566,6 @@ int main(int argc, char **argv) {
     engine.getImageFunctionProvider()->freeFilterBank();
     return 0;
 }
+
+
+
