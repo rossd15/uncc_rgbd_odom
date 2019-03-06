@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Tools to change and view node example output. -->
+<launch>
+
+    <arg name="run_rviz" default="false"/>
+    <arg name="rviz_config" default="uncc_rgbd_odom.rviz"/>
+    <arg name="run_rgbd_odometry_node" default="true"/>
+    <arg name="run_odometry_analysis_node" default="false"/>
+
+    <!-- namespace for the camera -->
+    <arg name="camera" default="camera" />
+
+    <!-- Setup coordinate TF frame structure is:
+    map_frame -> initial_body_frame -> initial_optical_frame -> vo_frame -->
+    <arg name="map_frame" default="optitrack" />
+    <arg name="initial_body_frame" default="initial_body_frame" />
+    <arg name="initial_optical_frame" default="initial_optical_frame" />
+    <arg name="vo_frame" default="vo_frame" />
+
+
+
+    <group ns="$(arg camera)">
+        <node name="uncc_rgbd_odom" pkg="uncc_rgbd_odom"
+              type="uncc_rgbd_odom" output="screen" if="$(arg run_rgbd_odometry_node)">
+            <param name="optical_parent" value = "$(arg initial_optical_frame)"/>
+            <param name="optical_frame" value = "$(arg vo_frame)"/>
+
+            <param name="tf_truth_initialize"  value = "false"/>
+            <param name="tf_truth_topic"       value = ""/>
+            <param name="tf_truth_init_time"   value = "0"/>
+            <param name="calibration_pose"     value = ""/>
+            <!-- valid depth_processing values are "moving_average", "dither", "none" -->
+            <!-- <param name="depth_processing"     value = "dither"/> -->
+            <param name="depth_processing"     value = "none"/>
+            <!-- Detectors/Descriptors: ORB, SIFT, SURF, BRISK -->
+            <!-- Detector-only algorithms: FAST, GFTT -->
+            <param name="feature_detector"     value = "ORB"/>
+            <!-- Detectors/Descriptors: ORB, SIFT, SURF, BRISK -->
+            <!-- Descriptor-only algorithms: BRIEF -->
+            <param name="feature_descriptor"   value = "ORB"/>
+            <param name="verbose" value="false"/>
+            <param name="visualize" value="false"/>
+            <remap from="rgb/input_image" to="rgb/image_raw"/>
+            <remap from="depth_registered/input_image" to="depth_registered/image_raw"/>
+        </node>
+    </group>
+
+
+</launch>
