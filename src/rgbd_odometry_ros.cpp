@@ -279,11 +279,13 @@ void RGBDOdometryEngine::rgbdCallback(const sensor_msgs::ImageConstPtr& depth_ms
 
     Eigen::Matrix<float, 6, 6> covMatrix = Eigen::Matrix<float, 6, 6>::Zero();
     bool odomEstimatorSuccess = false;
+    ros::Time start_time = ros::Time::now();
 
     if (!DIRECT_ODOM) {
         cv::UMat depthimg = depth_img_ptr->image.getUMat(cv::ACCESS_READ);
         cv::UMat frame = rgb_img_ptr->image.getUMat(cv::ACCESS_READ);
         odomEstimatorSuccess = computeRelativePose(frame, depthimg, trans, covMatrix);
+        ROS_WARN_STREAM("DT Is  " << (ros::Time::now() - start_time).toSec());
     } else {
         static cv_bridge::CvImageConstPtr prev_rgb_img_ptr, prev_depth_img_ptr;
         if (prev_rgb_img_ptr) {
@@ -296,7 +298,7 @@ void RGBDOdometryEngine::rgbdCallback(const sensor_msgs::ImageConstPtr& depth_ms
         prev_rgb_img_ptr = rgb_img_ptr;
         prev_depth_img_ptr = depth_img_ptr;
     }
-    
+
     if (initializationDone && odomEstimatorSuccess) {
         publishOdometry(trans, covMatrix, keyframe_frameid_str);
         counter.data++;

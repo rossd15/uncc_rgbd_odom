@@ -15,6 +15,8 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/core/eigen.hpp>
 
+#include <chrono>
+using namespace std::chrono;
 #ifdef HAVE_iGRAND
 #include <rgbd_odometry/opencv_function_dev.h>
 #endif
@@ -792,6 +794,7 @@ bool RGBDOdometryCore::computeRelativePose(cv::UMat& frame, cv::UMat& depthimg,
 
     // Preprocess: Convert Kinect depth image from image-of-shorts (mm) to image-of-floats (m)
     // Output: depth_frame -- a CV_32F (single float) depth image with units meters
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
     uchar depthtype = depthimg.getMat(cv::ACCESS_READ).type() & CV_MAT_DEPTH_MASK;
     if (depthtype == CV_16U) {
         std::cout << "Converting Kinect-style depth image to floating point depth image." << std::endl;
@@ -839,7 +842,9 @@ bool RGBDOdometryCore::computeRelativePose(cv::UMat& frame, cv::UMat& depthimg,
             break;
     }
     cv::Mat dimg = depth_frame.getMat(cv::ACCESS_READ);
-
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>( t2 - t1 ).count();
+    std::cout<< std::endl <<" PreProcessing "<< duration * 1e-6<< std::endl;
     // Preprocess: Compute keypoint (x,y) locations and descriptors at each keypoint
     //             (x,y) location
     // Output: keypoints_frame   -- keypoint (x,y) locations
@@ -866,6 +871,7 @@ bool RGBDOdometryCore::computeRelativePose(cv::UMat& frame, cv::UMat& depthimg,
     if (VERBOSE) {
         std::cout << "Found " << keypoints_frame->size() << " key points in frame." << std::endl;
     }
+    t1 = high_resolution_clock::now();
     int i = 0;
     std::vector<cv::KeyPoint>::iterator keyptIterator;
     for (keyptIterator = keypoints_frame->begin();
@@ -885,6 +891,9 @@ bool RGBDOdometryCore::computeRelativePose(cv::UMat& frame, cv::UMat& depthimg,
                     pt.x, pt.y, pt.z);
         }
     }
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<microseconds>( t2 - t1 ).count();
+    std::cout<< std::endl <<" For Loop "<< duration * 1e-6<< std::endl;
 
     // Preprocess: Stop execution if prior keypoints, descriptors or point cloud not available
     if (prior_keypoints->empty()) {
@@ -898,6 +907,7 @@ bool RGBDOdometryCore::computeRelativePose(cv::UMat& frame, cv::UMat& depthimg,
     //             descriptors from the current frame.
     // Output: good_matches -- a list of candidate correspondences between keypoints
     //                         in the prior frame and the current frame.
+    t1 = high_resolution_clock::now();
     match_time = 0;
     double t = (double) cv::getTickCount();
     t = (double) cv::getTickCount();
@@ -913,6 +923,9 @@ bool RGBDOdometryCore::computeRelativePose(cv::UMat& frame, cv::UMat& depthimg,
     }
     // measure performance of matching algorithm
     match_time = (cv::getTickCount() - t) * 1000. / cv::getTickFrequency();
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<microseconds>( t2 - t1 ).count();
+    std::cout<< std::endl <<" Match time "<< duration * 1e-6<< std::endl;
 
     // Preprocess: Stop execution unless enough matches exist to continue the algorithm.
     numMatches = good_matches.size();
@@ -965,7 +978,7 @@ bool RGBDOdometryCore::computeRelativePose(cv::UMat& frame, cv::UMat& depthimg,
             return false;
         }
     }
-
+    t1 = high_resolution_clock::now();
     // Step 2: Compute 3D point cloud correspondences from the 2D feature correspondences
     //         Creates a PCL correspondence list indicating matches between points cloud points
     //         in the image pair for alignment/odometry computation
@@ -1012,15 +1025,21 @@ bool RGBDOdometryCore::computeRelativePose(cv::UMat& frame, cv::UMat& depthimg,
         std::cout << "trans=\n" << trans << std::endl;
     }
     numInliers = ptcloud_matches_ransac->size();
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<microseconds>( t2 - t1 ).count();
+    std::cout<< std::endl <<" Point Cloud Calculation "<< duration * 1e-6<< std::endl;
 
     // Step 4: Estimate the covariance of our 3D transformation using the boostrap
     // Output: covMatrix -- an estimate of the transformation covariance
+    t1 = high_resolution_clock::now();
     estimateCovarianceBootstrap(ptcloud_matches_ransac,
             keypoints_frame,
             prior_keypoints,
             covMatrix,
             covarianceTime);
-
+    t2 = high_resolution_clock::now();
+    duration = duration_cast<microseconds>( t2 - t1 ).count();
+    std::cout<< std::endl <<" Covariance Calculation "<< duration * 1e-6<< std::endl;
     // Post-process: Save keypoints, descriptors and point cloud of current frame
     //               as the new prior frame.
     prior_image = frame.clone();
