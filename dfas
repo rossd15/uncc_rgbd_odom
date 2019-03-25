@@ -1,0 +1,13 @@
+[33m1237712[m HEAD@{0}: checkout: moving from revert-12377123 to master
+[33md9ceee2[m HEAD@{1}: checkout: moving from master to revert-12377123
+[33m1237712[m HEAD@{2}: checkout: moving from master to master
+[33m1237712[m HEAD@{3}: checkout: moving from faa8b9b5b4867261c6b3755b965944c3bc92982a to master
+[33mfaa8b9b[m HEAD@{4}: reset: moving to faa8b9b
+[33ma520f93[m HEAD@{5}: checkout: moving from faa8b9b5b4867261c6b3755b965944c3bc92982a to HEAD@{1}
+[33mfaa8b9b[m HEAD@{6}: commit: remap
+[33ma520f93[m HEAD@{7}: reset: moving to HEAD~
+[33m90c842c[m HEAD@{8}: checkout: moving from master to 90c842c52c9f8a6dc76ff20ffb76975c65d5c4a8
+[33m1237712[m HEAD@{9}: commit: as
+[33m90c842c[m HEAD@{10}: checkout: moving from a520f93c393882d34267243a529bd599edf00b43 to master
+[33ma520f93[m HEAD@{11}: checkout: moving from master to a520f93c393882d34267243a529bd599edf00b43
+[33m90c842c[m HEAD@{12}: clone: from http://REEF180_SRV/AVL-Summer-18/uncc_rgbd_odom
