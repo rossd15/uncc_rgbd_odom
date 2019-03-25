@@ -2,7 +2,7 @@
 <!-- Tools to change and view node example output. -->
 <launch>
 
-    <arg name="run_rviz" default="true"/>
+    <arg name="run_rviz" default="false"/>
     <arg name="rviz_config" default="uncc_rgbd_odom.rviz"/>
     <arg name="run_rgbd_odometry_node" default="true"/>
     <arg name="run_odometry_analysis_node" default="false"/>
@@ -28,7 +28,7 @@
         <include file="$(find uncc_rgbd_odom)/launch/astra_pro_driver.launch"/>
 
 
-  
+
 
     <group ns="$(arg camera)">
         <node name="uncc_rgbd_odom" pkg="uncc_rgbd_odom"
@@ -52,6 +52,9 @@
             <!-- Detectors/Descriptors: ORB, SIFT, SURF, BRISK -->
             <!-- Descriptor-only algorithms: BRIEF -->
             <param name="feature_descriptor"   value = "ORB"/>
+
+            <param name="verbose" value="false"/>
+            <param name="visualize" value="false"/>
         </node>
     </group>
 
