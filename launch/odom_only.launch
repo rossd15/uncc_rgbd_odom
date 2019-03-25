@@ -38,8 +38,8 @@
             <!-- Detectors/Descriptors: ORB, SIFT, SURF, BRISK -->
             <!-- Descriptor-only algorithms: BRIEF -->
             <param name="feature_descriptor"   value = "ORB"/>
-            <param name="verbose" value="false"/>
-            <param name="visualize" value="false"/>
+            <param name="verbose" value="true"/>
+            <param name="visualize" value="true"/>
             <!--<remap from="rgb/input_image" to="rgb/image_raw"/>-->
             <!--<remap from="depth_registered/input_image" to="depth_registered/image_raw"/>-->
         </node>

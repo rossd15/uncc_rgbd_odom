@@ -6,8 +6,7 @@
   <remap from="/camera/rgb/rgb/input_image" to="/camera/rgb/input_image"/>
   <remap from="/camera/rgb/rgb/camera_info" to="/camera/rgb/camera_info"/>
 
-  <arg name="sensor_type_astra" default="true" />
-  <include if="$(arg sensor_type_astra)" file="$(find astra_launch)/launch/astra_pro.launch">
-  </include>
+  <include file="$(find astra_launch)/launch/astra_pro.launch"/>
+
 
 </launch>

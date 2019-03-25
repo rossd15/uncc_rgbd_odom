@@ -85,6 +85,9 @@ public:
         std::cout << "RGBD parent coordinate frame name = \"" << optical_parent << "\"" << std::endl;
         std::cout << "RGBD coordinate frame name =  \"" << optical_frame << "\"" << std::endl;
 
+        nh.param<bool>("verbose", VERBOSE, "false");
+        nh.param<bool>("visualize", DUMP_MATCH_IMAGES, "false");
+
         if (depth_processing_str.compare("moving_average") == 0) {
             std::cout << "Applying moving average depth filter." << std::endl;
             this->depth_processing = Depth_Processing::MOVING_AVERAGE;

@@ -25,7 +25,7 @@
     <arg name="sensor_type_kinect_xboxOne" default="false" />
 
 
-        <include file="$(find uncc_rgbd_odom)/launch/test.launch"/>
+        <include file="$(find uncc_rgbd_odom)/launch/astra_pro_driver.launch"/>
 
 
   

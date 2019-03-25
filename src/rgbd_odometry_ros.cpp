@@ -94,9 +94,8 @@ void RGBDOdometryEngine::tf_truth_Callback(const geometry_msgs::TransformStamped
         ROS_INFO("Looking up transform from frame '%s' to frame '%s'", parent_frame_id_str.c_str(),
                 calib_frame_id_str.c_str());
     }
-    //ros::Time queryTime(ros::Time(0));
+
     ros::Time queryTime = ros::Time::now();
-    //ros::Time queryTime(ros::Time::now()-ros::Duration(0.1));
     try {
         listener.waitForTransform(parent_frame_id_str, calib_frame_id_str,
                 queryTime, ros::Duration(1));
@@ -185,21 +184,8 @@ void RGBDOdometryEngine::setInitialTransform(tf::Transform target_pose, bool isO
 
 void RGBDOdometryEngine::changePose(tf::Transform xform) {
     tf::Transform new_pose;
-    //        tf::Quaternion delta_frame = xform.getRotation();
-    //        tf::Vector3 delta_origin = xform.getOrigin();
-    //        tf::Quaternion optical_frame = rgbd_pose.getRotation();
-    //        tf::Vector3 optical_origin = rgbd_pose.getOrigin();
-    //        optical_frame *= delta_frame;
-    //        optical_origin += delta_origin;
-    //        new_pose.setRotation(optical_frame);
-    //        new_pose.setOrigin(optical_origin);
     new_pose.mult(rgbd_pose, xform);
     rgbd_pose = new_pose;
-
-    //        geometry_msgs::Transform test2;
-    //        tf::transformTFToMsg(test, test2);
-    //        std::cout << "rgbd_pose = " << test2 << std::endl;
-
     br.sendTransform(tf::StampedTransform(rgbd_pose,
             frame_time, parent_frame_id_str, rgbd_frame_id_str));
 }
@@ -367,10 +353,6 @@ void RGBDOdometryEngine::rgbdImageCallback(const sensor_msgs::ImageConstPtr& dep
         ROS_DEBUG("Computing relative pose for frame id %d.", frame_id);
     }
 
-    // pointer to the feature point detector object
-    //cv::Ptr<cv::FeatureDetector> detector_;
-    // pointer to the feature descriptor extractor object
-    //cv::Ptr<cv::DescriptorExtractor> extractor_;
     cv::UMat depthimg = cv_depthimg_ptr->image.getUMat(cv::ACCESS_READ);
     cv::UMat frame = cv_rgbimg_ptr->image.getUMat(cv::ACCESS_READ);
 
@@ -402,14 +384,6 @@ void RGBDOdometryEngine::rgbdImageCallback(const sensor_msgs::ImageConstPtr& dep
         if (!odomEstimatorSuccess) {
             return;
         }
-        //        if (LOG_ODOMETRY_TO_FILE) {
-        //            logTransformData(keyframe_frameid_str, frame_time,
-        //                    rmatcher->detectorStr, rmatcher->descriptorStr,
-        //                    detectorTime, descriptorTime, matchTime, RANSACTime, covarianceTime,
-        //                    numFeatures, numMatches, numInliers,
-        //                    quat, translation,
-        //                    trans, covMatrix, transform_vector);
-        //        }
         if (pairIdx == trackedIdx && initializationDone) {
             publishOdometry(trans, covMatrix, keyframe_frameid_str);
         }
@@ -553,15 +527,6 @@ int main(int argc, char **argv) {
      * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
      */
     ros::spin();
-    /*
-    int rateVal = 5;
-    ros::Rate rate(rateVal);
-    int i = 0;
-    while (true) {
-        ros::spinOnce();
-        rate.sleep();
-    }
-     */
 
     engine.getImageFunctionProvider()->freeFilterBank();
     return 0;
