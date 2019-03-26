@@ -45,7 +45,7 @@ They require completely different drivers which can be found in our repo.
 
 ## Citation
 ```html
-Anderson, Michael L., Kevin M. Brink, and Andrew R. Willis. 
+Michael L. Anderson, Kevin M. Brink, and Andrew R. Willis. 
 "Real-Time Visual Odometry Covariance Estimation for Unmanned Air Vehicle Navigation." 
 Journal of Guidance, Control, and Dynamics (2019): 1-17.
 ```
