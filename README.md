@@ -3,8 +3,10 @@ This was originally forked from the UNCC Vision lab's original [repo](https://gi
 What follows is not the official documentation for the node.
 
 ## Prerequisites
+```
 ROS Kinetic
 OpenCV
+```
 
 ## Installation
 ```html
