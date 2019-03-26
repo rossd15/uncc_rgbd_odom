@@ -16,8 +16,8 @@ cd .. && catkin_make
 ```
 
 ## Sensors
-We have tested the node with the [ASUS Xtion](https://www.asus.com/3D-Sensor/Xtion_PRO/), the [Orbecc Astra Pro](https://orbbec3d.com/product-astra-pro/) and the [Orbecc Astra](https://orbbec3d.com/product-astra)
-Use the [rgbd_odometry.launch](./launch/rgbd_odometry.launch) for the xtion and the [astra_pro.launch](./launch/astra_rgbd.launch) for the Orbbec Astra Pro. When you want to use the Orbbec Astra, go to the [rgbd_odometry.launch](./launch/rgbd_odometry.launch) and toggle the 
+We have tested the node with the [ASUS Xtion](https://www.asus.com/3D-Sensor/Xtion_PRO/), the [Orbecc Astra Pro](https://orbbec3d.com/product-astra-pro/) and the [Orbecc Astra](https://orbbec3d.com/product-astra).
+Use the [rgbd_odometry.launch](./launch/rgbd_odometry.launch) for the xtion and the [astra_pro.launch](./launch/astra_rgbd.launch) for the Orbbec Astra Pro. When you want to use the Orbbec Astra, go to the [rgbd_odometry.launch](./launch/rgbd_odometry.launch) and modify the launch file to have the values below.
 ```html
 <arg name="sensor_type_astra" default="true" />
 <arg name="sensor_type_xtion" default="false" />
