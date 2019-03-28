@@ -7,6 +7,10 @@
     <arg name="run_rgbd_odometry_node" default="true"/>
     <arg name="run_odometry_analysis_node" default="false"/>
 
+
+    <arg name="verbose" default="false"/>
+    <arg name="visualize" default="false"/>
+
     <!-- namespace for the camera -->
     <arg name="camera" default="camera" />
 
@@ -38,8 +42,8 @@
             <!-- Detectors/Descriptors: ORB, SIFT, SURF, BRISK -->
             <!-- Descriptor-only algorithms: BRIEF -->
             <param name="feature_descriptor"   value = "ORB"/>
-            <param name="verbose" value="false"/>
-            <param name="visualize" value="false"/>
+            <param name="verbose" value="$(arg verbose)"/>
+            <param name="visualize" value="$(arg visualize)"/>
             <remap from="rgb/input_image" to="rgb/image_raw"/>
             <remap from="depth_registered/input_image" to="depth_registered/image_raw"/>
         </node>
