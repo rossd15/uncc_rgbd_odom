@@ -34,12 +34,12 @@ If the node does not work as intended please make sure that you have remapped al
 ### Working
 For a detailed working please refer to the [publication](https://arc.aiaa.org/doi/abs/10.2514/1.G004000). 
 
-The algorithm takes a "reference image", extracts features and then takes another image extracts feature from the second images and compares them with the first image. With this it determines how much the camera has moved between the two frames and reports it along with a covariance. 
+The algorithm takes a "reference image", extracts features and then takes another image and extracts feature from the second image as well and compares them with those from the first image. With this it determines how much the camera has moved between the two frames and reports it along with a covariance. 
 
 ![Matcher](./docs/Image_Matcher.png)
 
 ## Note
-**Orbbec Astra Pro NOT EQUAL to Orbbec Astra** 
+**Orbbec Astra Pro is NOT EQUIVALENT to Orbbec Astra** 
 
 They require completely different drivers which can be found in our repo. 
 
