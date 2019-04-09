@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Feature3DEngine.h
  * Author: arwillis
  *
@@ -25,6 +25,7 @@
 #include <sensor_msgs/image_encodings.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <std_msgs/Float64.h>
 
 #include <image_transport/subscriber_filter.h>
 #include <image_geometry/pinhole_camera_model.h>
@@ -59,7 +60,7 @@ public:
         std::string optical_parent, optical_frame, depth_processing_str;
         std::string feature_detector, feature_descriptor;
         bool useOpenCL, tf_truth_initialize;
-
+        previous_time = ros::Time::now();
         nh.param<std::string>("OpenCL_path", opencl_path, ".");
         nh.param<std::string>("depthmask_cl", depthmask_cl, "depthmask.cl");
         nh.param("useOpenCL", useOpenCL, false);
@@ -98,7 +99,7 @@ public:
 
     void publishOdometry(Eigen::Matrix4f& trans, Eigen::Matrix<float, 6, 6 > covMatrix,
             std::string& keyframe_frameid_str);
-    
+
 private:
     // -------------------------
     // Disabling default copy constructor and default
@@ -125,8 +126,11 @@ private:
     image_transport::SubscriberFilter sub_rgbImage;
     message_filters::Subscriber<sensor_msgs::CameraInfo> sub_rgbCameraInfo;
 
+    ros::Time previous_time;
+    double dt;
+    std_msgs::Float64 dt_msg;
+    ros::Publisher dt_pub;
 
 };
 
 #endif /* RGBD_ODOMETRY_H */
-

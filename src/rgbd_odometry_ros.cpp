@@ -64,6 +64,17 @@ void RGBDOdometryEngine::rgbdCallback(const sensor_msgs::ImageConstPtr& depth_ms
         const sensor_msgs::CameraInfoConstPtr& info_msg) {
 
     ros::Time timestamp = depth_msg->header.stamp;
+    dt_msg.data = (timestamp - previous_time).toSec();
+
+    if(dt_msg.data > 0.08 || dt_msg.data < 0.05){
+      ROS_WARN_STREAM("The image is rejected! Dt was "<< dt_msg.data);
+      previous_time = timestamp;
+      return;
+    }
+    dt_pub.publish(dt_msg);
+
+    previous_time = timestamp;
+    ROS_WARN_STREAM("DT between images are " << dt);
     static int frame_id = 0;
     if (VERBOSE) {
         ROS_DEBUG("Heard rgbd image.");
@@ -114,7 +125,7 @@ void RGBDOdometryEngine::rgbdCallback(const sensor_msgs::ImageConstPtr& depth_ms
         prev_rgb_img_ptr = rgb_img_ptr;
         prev_depth_img_ptr = depth_img_ptr;
     }
-    
+
     if (odomEstimatorSuccess) {
         publishOdometry(trans, covMatrix, keyframe_frameid_str);
 
@@ -203,6 +214,7 @@ void RGBDOdometryEngine::initializeSubscribersAndPublishers() {
     pubXforms = nodeptr->advertise<geometry_msgs::TransformStamped>("relative_xform", 1000);
     pubPose_w_cov = nodeptr->advertise<geometry_msgs::PoseWithCovarianceStamped>("pose_w_cov", 1000);
     pubOdom_w_cov = nodeptr->advertise<geometry_msgs::PoseWithCovarianceStamped>("odom_w_cov", 1000);
+    dt_pub = nodeptr->advertise<std_msgs::Float64>("dt_images", 1);
 }
 
 int main(int argc, char **argv) {
@@ -238,6 +250,3 @@ int main(int argc, char **argv) {
     engine.getImageFunctionProvider()->freeFilterBank();
     return 0;
 }
-
-
-

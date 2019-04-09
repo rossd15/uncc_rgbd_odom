@@ -27,7 +27,7 @@
 
     <group ns="$(arg camera)">
         <node name="uncc_rgbd_odom" pkg="uncc_rgbd_odom"
-              type="uncc_rgbd_odom" output="screen" if="$(arg run_rgbd_odometry_node)">
+              type="uncc_rgbd_odom" if="$(arg run_rgbd_odometry_node)">
             <param name="optical_parent" value = "$(arg initial_optical_frame)"/>
             <param name="optical_frame" value = "$(arg vo_frame)"/>
 
