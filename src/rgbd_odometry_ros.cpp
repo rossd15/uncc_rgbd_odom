@@ -74,7 +74,6 @@ void RGBDOdometryEngine::rgbdCallback(const sensor_msgs::ImageConstPtr& depth_ms
     dt_pub.publish(dt_msg);
 
     previous_time = timestamp;
-    ROS_WARN_STREAM("DT between images are " << dt);
     static int frame_id = 0;
     if (VERBOSE) {
         ROS_DEBUG("Heard rgbd image.");
