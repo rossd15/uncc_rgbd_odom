@@ -2,11 +2,6 @@
 <!-- Tools to change and view node example output. -->
 <launch>
 
-    <arg name="run_rviz" default="false"/>
-    <arg name="rviz_config" default="uncc_rgbd_odom.rviz"/>
-    <arg name="run_rgbd_odometry_node" default="true"/>
-    <arg name="run_odometry_analysis_node" default="false"/>
-
     <arg name="rgb_topic" default="image_raw"/>
     <arg name="depth_topic" default="image_raw"/>
 
@@ -27,7 +22,7 @@
 
     <group ns="$(arg camera)">
         <node name="uncc_rgbd_odom" pkg="uncc_rgbd_odom"
-              type="uncc_rgbd_odom" if="$(arg run_rgbd_odometry_node)">
+              type="uncc_rgbd_odom" output="screen">
             <param name="optical_parent" value = "$(arg initial_optical_frame)"/>
             <param name="optical_frame" value = "$(arg vo_frame)"/>
 
