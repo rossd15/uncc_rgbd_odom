@@ -65,13 +65,12 @@ void RGBDOdometryEngine::rgbdCallback(const sensor_msgs::ImageConstPtr& depth_ms
 
     ros::Time timestamp = depth_msg->header.stamp;
     dt_msg.data = (timestamp - previous_time).toSec();
-
-    if(dt_msg.data > 0.036 || dt_msg.data < 0.03){
-//      ROS_WARN_STREAM("The image is rejected! Dt was "<< dt_msg.data);
-      previous_time = timestamp;
-      // return;
-    }
     dt_pub.publish(dt_msg);
+    if(dt_msg.data > 0.07 || dt_msg.data < 0.03){
+      ROS_WARN_STREAM("The image is rejected! Dt was "<< dt_msg.data);
+      previous_time = timestamp;
+      return;
+    }
 
     previous_time = timestamp;
     static int frame_id = 0;
